@@ -14,7 +14,7 @@ module.exports = {
       ],
     });
     config.resolve.extensions.push('.ts', '.tsx');
-    config.resolve.alias['react-captcha'] = path.resolve('src')
+    config.resolve.alias['react-captcha-code'] = path.resolve('src')
     return config;
   },
   stories: ['../stories/**/*.stories.tsx'],

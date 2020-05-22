@@ -1,11 +1,11 @@
-# react-captcha
+# react-captcha-code
 
-基于 React 和 canvas 画出的一个验证码组件
+基于 `React` 和 `canvas` 的一个验证码组件
 
 ## 安装
 
 ```
-npm install react-captcha --save
+npm install react-captcha-code --save
 ```
 
 ## 需要用户自己安装的依赖
@@ -29,11 +29,12 @@ npm install react-captcha --save
 | `onChange`  | `(captcha: string) => void` |   `是`   |           | 点击验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用） |
 | `className` |          `string`           |   `否`   |           | 样式名                                                                     |
 
-基本用法
+## 基本用法
 
+### 代码示例
 ```jsx
 import React, { useCallback } from 'react';
-import Captcha from 'react-captcha';
+import Captcha from 'react-captcha-code';
 
 export default { title: 'Basic' };
 
@@ -47,3 +48,6 @@ export const Basic = () => {
 
 export default Basic;
 ```
+### 效果
+
+[![Edit zen-paper-9yish](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/zen-paper-9yish?fontsize=14&hidenavigation=1&theme=dark)

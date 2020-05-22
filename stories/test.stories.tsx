@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import Captcha from 'react-captcha';
+import Captcha from 'react-captcha-code';
 
 export default { title: 'Basic' };
 
@@ -10,7 +10,7 @@ export const Basic = () => {
   }, [])
 
   return (
-    <Captcha charNum={4} onChange={handleClick} />
+    <Captcha charNum={6} onChange={handleClick} />
   )
 }
 
