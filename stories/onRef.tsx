@@ -1,9 +1,9 @@
 import React, { useCallback, useRef } from 'react';
 import Captcha from 'react-captcha-code';
 
-export default { title: 'Basic' };
+export default { title: 'Ref' };
 
-export const Basic = () => {
+export const Ref = () => {
 
   const handleClick = useCallback((captcha) => {
     console.log('captcha:', captcha);
@@ -30,6 +30,6 @@ export const Basic = () => {
   )
 }
 
-Basic.story = {
+Ref.story = {
   name: 'Basic',
 }

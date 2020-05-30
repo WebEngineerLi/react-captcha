@@ -33,7 +33,8 @@ export interface ICaptchaProps {
   /**
    * 样式名
    */
-  className?: string
+  className?: string,
+  onRef: (ref: any) => void
 }
 
 const Captcha: React.FC<ICaptchaProps> = ({
@@ -43,10 +44,15 @@ const Captcha: React.FC<ICaptchaProps> = ({
   charNum = 4,
   fontSize = 25,
   onChange,
-  className
+  className,
+  onRef
 }) => {
 
   const canvas = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    onRef(canvas)
+  }, [])
 
   const generateCaptcha = useCallback(() => {
     let checkCode = '';
