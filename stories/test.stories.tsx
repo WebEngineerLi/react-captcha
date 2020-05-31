@@ -5,27 +5,31 @@ export default { title: 'Basic' };
 
 export const Basic = () => {
 
-  const handleClick = useCallback((captcha) => {
+  const handleChange = useCallback((captcha) => {
     console.log('captcha:', captcha);
   }, [])
 
   const captchaRef = useRef<HTMLCanvasElement>();
 
-  const getRef = (ref: any) => {
-    console.log('ref:', ref);
+  const handleRef = (ref: any) => {
     captchaRef.current = ref.current;
+    
+  }
+
+  const handleClick = () => {
+    (captchaRef as any).current.click();
   }
 
   return (
     <>
       <Captcha
-        onRef={getRef}
+        onRef={handleRef}
         charNum={6}
-        onChange={handleClick}
+        onChange={handleChange}
       />
-      <button onClick={() => {
-        captchaRef.current.click();
-      }}>111</button>
+      <div>
+        <button onClick={handleClick}>更换验证码</button>
+      </div>
     </>
   )
 }
