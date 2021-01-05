@@ -16,8 +16,11 @@ var utils_1 = require("./utils");
 var lodash_1 = require("lodash");
 var classnames_1 = __importDefault(require("classnames"));
 var Captcha = function (_a) {
-    var _b = _a.height, height = _b === void 0 ? 40 : _b, _c = _a.width, width = _c === void 0 ? 100 : _c, _d = _a.bgColor, bgColor = _d === void 0 ? '#DFF0D8' : _d, _e = _a.charNum, charNum = _e === void 0 ? 4 : _e, _f = _a.fontSize, fontSize = _f === void 0 ? 25 : _f, onChange = _a.onChange, className = _a.className;
+    var _b = _a.height, height = _b === void 0 ? 40 : _b, _c = _a.width, width = _c === void 0 ? 100 : _c, _d = _a.bgColor, bgColor = _d === void 0 ? '#DFF0D8' : _d, _e = _a.charNum, charNum = _e === void 0 ? 4 : _e, _f = _a.fontSize, fontSize = _f === void 0 ? 25 : _f, onChange = _a.onChange, className = _a.className, onRef = _a.onRef;
     var canvas = react_1.useRef(null);
+    react_1.useEffect(function () {
+        onRef(canvas);
+    }, []);
     var generateCaptcha = react_1.useCallback(function () {
         var checkCode = '';
         if (canvas.current) {

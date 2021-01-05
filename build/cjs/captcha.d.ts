@@ -29,6 +29,10 @@ export interface ICaptchaProps {
      * 样式名
      */
     className?: string;
+    /**
+     * 用来获取组件的props
+     */
+    onRef: (ref: any) => void;
 }
 declare const Captcha: React.FC<ICaptchaProps>;
 export default Captcha;
