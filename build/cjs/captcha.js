@@ -15,12 +15,17 @@ var S = __importStar(require("./style"));
 var utils_1 = require("./utils");
 var lodash_1 = require("lodash");
 var classnames_1 = __importDefault(require("classnames"));
-var Captcha = function (_a) {
+var Captcha = react_1.forwardRef(function (_a, ref) {
     var _b = _a.height, height = _b === void 0 ? 40 : _b, _c = _a.width, width = _c === void 0 ? 100 : _c, _d = _a.bgColor, bgColor = _d === void 0 ? '#DFF0D8' : _d, _e = _a.charNum, charNum = _e === void 0 ? 4 : _e, _f = _a.fontSize, fontSize = _f === void 0 ? 25 : _f, onChange = _a.onChange, className = _a.className, onRef = _a.onRef;
     var canvas = react_1.useRef(null);
     react_1.useEffect(function () {
-        onRef(canvas);
+        onRef && onRef(canvas);
     }, []);
+    react_1.useImperativeHandle(ref, function () { return ({
+        refresh: function () {
+            canvas.current.click();
+        },
+    }); });
     var generateCaptcha = react_1.useCallback(function () {
         var checkCode = '';
         if (canvas.current) {
@@ -37,7 +42,7 @@ var Captcha = function (_a) {
                     checkCode += code;
                     ctx.save();
                     ctx.beginPath();
-                    ctx.fillStyle = "white";
+                    ctx.fillStyle = 'white';
                     ctx.strokeStyle = utils_1.randomColor();
                     ctx.font = fontSize + "px serif";
                     ctx.rotate((Math.PI / 180) * utils_1.randomNum(-5, 5));
@@ -71,5 +76,5 @@ var Captcha = function (_a) {
         }
     }, []);
     return (react_1.default.createElement(S.SCaptcha, { className: classnames_1.default('react-captcha', className), onClick: handleClick, height: height, width: width, ref: canvas }));
-};
+});
 exports.default = Captcha;

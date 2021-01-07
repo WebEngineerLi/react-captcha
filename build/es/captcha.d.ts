@@ -32,8 +32,14 @@ export interface ICaptchaProps {
     /**
      * 用来获取组件的props
      */
-    onRef: (ref: any) => void;
+    onRef?: (ref: any) => void;
 }
-declare const Captcha: React.FC<ICaptchaProps>;
+export interface canvasRefProps {
+    /**
+     * 主动刷新验证码接口
+     */
+    refresh(): void;
+}
+declare const Captcha: React.ForwardRefExoticComponent<ICaptchaProps & React.RefAttributes<canvasRefProps>>;
 export default Captcha;
 //# sourceMappingURL=captcha.d.ts.map

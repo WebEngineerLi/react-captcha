@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import * as S from './style';
-import { originalCharacter, randomColor, randomNum } from './utils'
+import { originalCharacter, randomColor, randomNum } from './utils';
 import { isFunction } from 'lodash';
 import cs from 'classnames';
 
@@ -8,115 +8,131 @@ export interface ICaptchaProps {
   /**
    * 高度
    */
-  height?: number
+  height?: number;
   /**
    * 宽度
    */
-  width?: number
+  width?: number;
   /**
    * 背景颜色
    */
-  bgColor?: string
+  bgColor?: string;
   /**
    * 字符个数
    */
-  charNum?: number
+  charNum?: number;
   /**
    * 字体大小
    */
-  fontSize?: number,
+  fontSize?: number;
   /**
    * 点击验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用）
    * @memberof ICaptchaProps
    */
-  onChange: (captcha: string) => void
+  onChange: (captcha: string) => void;
   /**
    * 样式名
    */
-  className?: string,
+  className?: string;
   /**
    * 用来获取组件的props
    */
-  onRef: (ref: any) => void
+  onRef?: (ref: any) => void;
 }
 
-const Captcha: React.FC<ICaptchaProps> = ({
-  height = 40,
-  width = 100,
-  bgColor = '#DFF0D8',
-  charNum = 4,
-  fontSize = 25,
-  onChange,
-  className,
-  onRef
-}) => {
+export interface canvasRefProps {
+  /**
+   * 主动刷新验证码接口
+   */
+  refresh(): void;
+}
 
-  const canvas = useRef<HTMLCanvasElement | null>(null)
+const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
+  (
+    {
+      height = 40,
+      width = 100,
+      bgColor = '#DFF0D8',
+      charNum = 4,
+      fontSize = 25,
+      onChange,
+      className,
+      onRef,
+    },
+    ref,
+  ) => {
+    const canvas = useRef<HTMLCanvasElement | null>(null);
 
-  useEffect(() => {
-    onRef(canvas)
-  }, [])
+    useEffect(() => {
+      onRef && onRef(canvas);
+    }, []);
 
-  const generateCaptcha = useCallback(() => {
-    let checkCode = '';
-    if (canvas.current) {
-      const ctx = canvas.current.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, width, height);
-        ctx.beginPath()
-        ctx.fillStyle = bgColor;
-        ctx.fillRect(0, 0, width, height);
-        for (let i = 0; i < charNum; i++) {
-          const charGap = Math.round(width / charNum)
-          const offset = Math.round(charGap / 2) - 6;
-          const code = originalCharacter[randomNum(0, originalCharacter.length - 1)];
-          checkCode += code;
-          ctx.save();
+    useImperativeHandle(ref, () => ({
+      refresh() {
+        (canvas.current as HTMLCanvasElement).click();
+      },
+    }));
+
+    const generateCaptcha = useCallback(() => {
+      let checkCode = '';
+      if (canvas.current) {
+        const ctx = canvas.current.getContext('2d');
+        if (ctx) {
+          ctx.clearRect(0, 0, width, height);
           ctx.beginPath();
-          ctx.fillStyle = "white";
-          ctx.strokeStyle = randomColor();
-          ctx.font = `${fontSize}px serif`;
-          ctx.rotate((Math.PI / 180) * randomNum(-5, 5));
-          ctx.strokeText(code, offset + i * charGap, height / 2 + 8);
-          ctx.beginPath();
-          ctx.moveTo(randomNum(0, width), randomNum(0, height));
-          ctx.lineTo(randomNum(0, width), randomNum(0, height));
-          ctx.stroke();
-          ctx.restore();
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(0, 0, width, height);
+          for (let i = 0; i < charNum; i++) {
+            const charGap = Math.round(width / charNum);
+            const offset = Math.round(charGap / 2) - 6;
+            const code = originalCharacter[randomNum(0, originalCharacter.length - 1)];
+            checkCode += code;
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = randomColor();
+            ctx.font = `${fontSize}px serif`;
+            ctx.rotate((Math.PI / 180) * randomNum(-5, 5));
+            ctx.strokeText(code, offset + i * charGap, height / 2 + 8);
+            ctx.beginPath();
+            ctx.moveTo(randomNum(0, width), randomNum(0, height));
+            ctx.lineTo(randomNum(0, width), randomNum(0, height));
+            ctx.stroke();
+            ctx.restore();
+          }
+          return checkCode;
+        } else {
+          return '';
         }
-        return checkCode;
       } else {
-        return ''
+        return '';
       }
-    } else {
-      return ''
-    }
+    }, []);
 
-  }, [])
+    const handleClick = useCallback(() => {
+      if (isFunction(onChange)) {
+        const captcha = generateCaptcha();
+        onChange(captcha);
+      }
+    }, [onChange]);
 
-  const handleClick = useCallback(() => {
-    if (isFunction(onChange)) {
-      const captcha = generateCaptcha();
-      onChange(captcha)
-    }
-  }, [onChange])
+    useEffect(() => {
+      if (isFunction(onChange)) {
+        const captcha = generateCaptcha();
+        onChange(captcha);
+      }
+    }, []);
 
-  useEffect(() => {
-    if (isFunction(onChange)) {
-      const captcha = generateCaptcha();
-      onChange(captcha)
-    }
-  }, [])
+    return (
+      <S.SCaptcha
+        className={cs('react-captcha', className)}
+        onClick={handleClick}
+        height={height}
+        width={width}
+        ref={canvas}
+      />
+    );
+  },
+);
 
-  return (
-    <S.SCaptcha
-      className={cs('react-captcha', className)}
-      onClick={handleClick}
-      height={height}
-      width={width}
-      ref={canvas}
-    />
-  )
-}
-
-export default Captcha
+export default Captcha;

@@ -8,19 +8,16 @@ export const Basic = () => {
     console.log('captcha:', captcha);
   }, []);
 
-  const captchaRef = useRef<HTMLCanvasElement>();
-
-  const handleRef = (ref: any) => {
-    captchaRef.current = ref.current;
-  };
+  const captchaRef = useRef<any>();
 
   const handleClick = () => {
-    (captchaRef as any).current.click();
+    // 刷新验证码
+    (captchaRef as any).current.refresh();
   };
 
   return (
     <>
-      <Captcha onRef={handleRef} charNum={6} onChange={handleChange} />
+      <Captcha ref={captchaRef} charNum={6} onChange={handleChange} />
       <div>
         <button onClick={handleClick}>更换验证码</button>
       </div>
