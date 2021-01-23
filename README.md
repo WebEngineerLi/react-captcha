@@ -1,3 +1,4 @@
+
 # react-captcha-code
 
 基于 `React` 和 `canvas` 的一个验证码组件
@@ -69,7 +70,7 @@ export const Basic = () => {
 
 # 更新日志
 
-## [1.0.5] - 2020-01-07
+## [1.0.5] - 2021-01-07
 
 ### Features
 
