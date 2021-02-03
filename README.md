@@ -1,4 +1,3 @@
-
 # react-captcha-code
 
 基于 `React` 和 `canvas` 的一个验证码组件
@@ -27,7 +26,9 @@ npm install react-captcha-code --save
 |  `bgColor`  |          `string`           |   `否`   | `#DFF0D8` | 背景颜色                                                                                                                                |
 |  `charNum`  |          `number`           |   `否`   | `4`       | 字符个数                                                                                                                                |
 | `fontSize`  |          `number`           |   `否`   | `25`      | 字体大小                                                                                                                                |
-| `onChange`  | `(captcha: string) => void` |   `是`   |           | 点击验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用）                                                              |
+| `code`  |          `string`           |   `否`   |      | 要展示的验证码（受控） |
+| `onChange`  | `(captcha: string) => void` |   `否`   |           | 点击验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用）                                                              |
+| `onClick`  | `() => void` |   `否`   |           | 点击验证码的回调函数                                             |
 |   `onRef`   |    `(ref: any) => void`     |   `否`   |           | ~~在验证码组件初次挂载时调用，返回 canvas DOM（可主动调用 canvas.click() 来刷新验证码）~~ `不推荐使用，推荐使用下面的 ref 获取刷新接口` |
 |    `ref`    |             `-`             |   `否`   |           | 推荐使用 ref 获取刷新接口`canvasRef.current.refresh()` 组件内部通过过`useImperativeHandle` 暴露 refresh 接口                            |
 | `className` |          `string`           |   `否`   |           | 样式名                                                                                                                                  |
@@ -79,3 +80,9 @@ export const Basic = () => {
 ### Fix
 
 - `onRef` 改为可选
+
+## [1.0.6] - 2021-02-03
+
+### Features
+
+- 验证码组件支持受控

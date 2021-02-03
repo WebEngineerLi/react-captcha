@@ -26,10 +26,19 @@ export interface ICaptchaProps {
    */
   fontSize?: number;
   /**
+   * 改变验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用）
+   * @memberof ICaptchaProps
+   */
+  onChange?: (captcha: string) => void;
+  /**
    * 点击验证码的回调函数, 用来传递验证码（会在页面初始加载和点击验证码时调用）
    * @memberof ICaptchaProps
    */
-  onChange: (captcha: string) => void;
+  onClick?: () => void;
+  /**
+   * 数组类型，传入用来展示的验证码
+   */
+  code?: string;
   /**
    * 样式名
    */
@@ -56,8 +65,10 @@ const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
       charNum = 4,
       fontSize = 25,
       onChange,
+      onClick,
       className,
       onRef,
+      code = ''
     },
     ref,
   ) => {
@@ -73,6 +84,19 @@ const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
       },
     }));
 
+    // 生成原始的数据
+    const generateSourceCode = useCallback(() => {
+      const array = []
+      if (code) {
+        return code.split('')
+      }
+      for (let i = 0; i < charNum; i++) {
+        const temp = originalCharacter[randomNum(0, originalCharacter.length - 1)]
+        array.push(temp)
+      }
+      return array;
+    }, [code, charNum]);
+
     const generateCaptcha = useCallback(() => {
       let checkCode = '';
       if (canvas.current) {
@@ -82,10 +106,11 @@ const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
           ctx.beginPath();
           ctx.fillStyle = bgColor;
           ctx.fillRect(0, 0, width, height);
-          for (let i = 0; i < charNum; i++) {
+          const sourceCode = generateSourceCode();
+          for (let i = 0; i < sourceCode.length; i++) {
             const charGap = Math.round(width / charNum);
             const offset = Math.round(charGap / 2) - 6;
-            const code = originalCharacter[randomNum(0, originalCharacter.length - 1)];
+            const code = sourceCode[i]
             checkCode += code;
             ctx.save();
             ctx.beginPath();
@@ -107,21 +132,24 @@ const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
       } else {
         return '';
       }
-    }, []);
+    }, [code]);
 
     const handleClick = useCallback(() => {
-      if (isFunction(onChange)) {
+      if (isFunction(onChange) && !code) {
         const captcha = generateCaptcha();
         onChange(captcha);
       }
-    }, [onChange]);
+      if (isFunction(onClick)) {
+        onClick()
+      }
+    }, [onChange, code]);
 
     useEffect(() => {
-      if (isFunction(onChange)) {
-        const captcha = generateCaptcha();
+      const captcha = generateCaptcha();
+      if (isFunction(onChange) && !code) {
         onChange(captcha);
       }
-    }, []);
+    }, [code]);
 
     return (
       <S.SCaptcha

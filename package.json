@@ -1,6 +1,6 @@
 {
   "name": "react-captcha-code",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "基于React和canvas的验证码",
   "main": "build/es/index.js",
   "types": "build/types/index.js",
