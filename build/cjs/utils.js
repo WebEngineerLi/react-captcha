@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.originalCharacter = exports.randomColor = exports.randomNum = void 0;
 // 随机数字
 function randomNum(m, n) {
     return Math.floor(Math.random() * (n - m + 1) + m);
