@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
-import * as S from './style';
 import { originalCharacter, randomColor, randomNum } from './utils';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import cs from 'classnames';
 
 export interface ICaptchaProps {
@@ -152,7 +151,8 @@ const Captcha = forwardRef<canvasRefProps, ICaptchaProps>(
     }, [code]);
 
     return (
-      <S.SCaptcha
+      <canvas
+        style={{ cursor: 'pointer' }}
         className={cs('react-captcha', className)}
         onClick={handleClick}
         height={height}
